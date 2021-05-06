@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.serotonin.modbus4j.serial.SerialPortWrapper;
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 /**
  * 
@@ -17,7 +19,8 @@ import com.serotonin.modbus4j.serial.SerialPortWrapper;
  *
  */
 public class TestSerialPortWrapper implements SerialPortWrapper{
-	
+
+	private SerialPort port;
 	private String commPortId;
     private int baudRate;
     private int flowControlIn;
@@ -28,13 +31,16 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	
 	public TestSerialPortWrapper(String commPortId, int baudRate, int flowControlIn,
 			int flowControlOut, int dataBits, int stopBits, int parity){
-		
+
+		this.commPortId = commPortId;
         this.baudRate = baudRate;
         this.flowControlIn = flowControlIn;
         this.flowControlOut = flowControlOut;
         this.dataBits = dataBits;
         this.stopBits = stopBits;
         this.parity = parity;
+
+		port = new SerialPort(this.commPortId);
 	}
 	
 
@@ -43,6 +49,7 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	 */
 	@Override
 	public void close() throws Exception {
+		port.closePort();
 		// TODO Auto-generated method stub
 		
 	}
@@ -52,8 +59,29 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	 */
 	@Override
 	public void open() throws Exception {
+		try {
+			port.openPort();
+			port.setParams(this.getBaudRate(), this.getDataBits(), this.getStopBits(), this.getParity());
+			port.setFlowControlMode(this.getFlowControlIn() | this.getFlowControlOut());
+
+			//listeners.forEach(PortConnectionListener::opened);
+			//LOG.debug("Serial port {} opened", port.getPortName());
+		} catch (SerialPortException ex) {
+			//LOG.error("Error opening port : {} for {} ", port.getPortName(), ex);
+		}
+
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getFlowControlIn() {
+		return flowControlIn;
+		//return SerialPort.FLOWCONTROL_NONE;
+	}
+
+	public int getFlowControlOut() {
+		return flowControlOut;
+		//return SerialPort.FLOWCONTROL_NONE;
 	}
 
 	/* (non-Javadoc)
@@ -62,7 +90,9 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public InputStream getInputStream() {
 		// TODO Auto-generated method stub
-		return null;
+		// return null;
+
+		return new SerialInputStream(port);
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +101,9 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public OutputStream getOutputStream() {
 		// TODO Auto-generated method stub
-		return null;
+		// return null;
+
+		return new SerialOutputStream(port);
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +112,8 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public int getBaudRate() {
 		// TODO Auto-generated method stub
-		return 0;
+		// return 0;
+		return baudRate;
 	}
 
 	/* (non-Javadoc)
@@ -89,7 +122,8 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public int getStopBits() {
 		// TODO Auto-generated method stub
-		return 0;
+		// return 0;
+		return  stopBits;
 	}
 
 	/* (non-Javadoc)
@@ -98,7 +132,8 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public int getParity() {
 		// TODO Auto-generated method stub
-		return 0;
+		// return 0;
+		return parity;
 	}
 
 	/* (non-Javadoc)
@@ -107,7 +142,8 @@ public class TestSerialPortWrapper implements SerialPortWrapper{
 	@Override
 	public int getDataBits() {
 		// TODO Auto-generated method stub
-		return 0;
+		//return 0;
+		return  dataBits;
 	}
 
 }

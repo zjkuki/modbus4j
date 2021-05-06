@@ -17,7 +17,7 @@ public class Test2 {
     public static void main(String[] args) throws Exception {
         IpParameters params = new IpParameters();
         params.setHost("localhost");
-        params.setPort(502);
+        params.setPort(20108);
 
         ModbusMaster master = new ModbusFactory().createTcpMaster(params, false);
         master.init();

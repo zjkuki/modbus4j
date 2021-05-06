@@ -14,7 +14,7 @@ import com.serotonin.modbus4j.locator.BaseLocator;
  */
 public class Test3 {
     public static void main(String[] args) throws Exception {
-    	String commPortId = "COM1";
+    	String commPortId = "COM3";
     	int baudRate = 9600;
     	int flowControlIn = 0;
 		int flowControlOut = 0; 
@@ -27,10 +27,11 @@ public class Test3 {
         ModbusMaster master = new ModbusFactory().createRtuMaster(wrapper);
         master.init();
 
-        System.out.println(master.testSlaveNode(5));
+        System.out.println(master.testSlaveNode(10));
 
         // Define the point locator.
-        BaseLocator<Number> loc = BaseLocator.holdingRegister(1, 0, DataType.TWO_BYTE_INT_UNSIGNED);
+        // BaseLocator<Number> loc = BaseLocator.holdingRegister(10, 166, DataType.TWO_BYTE_INT_UNSIGNED);
+        BaseLocator<Number> loc = BaseLocator.holdingRegister(10, 166, DataType.TWO_BYTE_INT_UNSIGNED);
 
         // Set the point value
         master.setValue(loc, 1800);
