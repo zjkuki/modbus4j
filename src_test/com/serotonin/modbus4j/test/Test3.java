@@ -14,7 +14,7 @@ import com.serotonin.modbus4j.locator.BaseLocator;
  */
 public class Test3 {
     public static void main(String[] args) throws Exception {
-    	String commPortId = "COM3";
+    	String commPortId = "COM1";
     	int baudRate = 9600;
     	int flowControlIn = 0;
 		int flowControlOut = 0; 

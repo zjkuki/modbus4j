@@ -80,11 +80,24 @@ public class TestKuki1 {
             readHoldingRegistersTest(master, slaveId, 82, 11);
             // writeRegistersTest(master, slaveId, 21, new short[] {1, 10, 100, 1000, 10000, (short)65535});
 
+
             // 03 Holding Register类型数据读取
             BaseLocator<Number> loc = BaseLocator.holdingRegister(slaveId, 85, DataType.FOUR_BYTE_FLOAT);
             Number value =  master.getValue(loc);
 
-            System.out.println("返回信息："+ value);
+            System.out.println("返回含氧量oxygen %信息："+ value);
+
+            // 03 Holding Register类型数据读取
+            loc = BaseLocator.holdingRegister(slaveId, 89, DataType.FOUR_BYTE_FLOAT);
+            value =  master.getValue(loc);
+
+            System.out.println("返回含氧量oxygen mg/l和ppm信息："+ value);
+
+            // 03 Holding Register类型数据读取
+            loc = BaseLocator.holdingRegister(slaveId, 93, DataType.FOUR_BYTE_FLOAT);
+            value =  master.getValue(loc);
+
+            System.out.println("返回温度Temperature信息："+ value);
             //This is Success
             // writeMaskRegisterTest(master, slaveId, 26, 0xf2, 0x25);
 
