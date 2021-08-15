@@ -1,106 +1,66 @@
-/*
-    Copyright (C) 2006-2007 Serotonin Software Technologies Inc.
- 	@author Matthew Lohbihler
- */
 package com.serotonin.modbus4j.test;
 
 import com.serotonin.modbus4j.ModbusFactory;
 import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.code.DataType;
 import com.serotonin.modbus4j.exception.ModbusTransportException;
+import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 import com.serotonin.modbus4j.msg.*;
+import com.serotonin.modbus4j.sero.io.StreamUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Arrays;
 
-/**
- * @author Matthew Lohbihler
- */
-public class TestKuki1 {
+public class TestTCPListenerTestKuki {
     public static void main(String[] args) throws Exception {
 
-        String commPortId = "COM3";
-        int baudRate = 9600;
+        String commPortId = "COM1";
+        /*int baudRate = 9600;
         int flowControlIn = 0;
         int flowControlOut = 0;
         int dataBits = 8;
-        int stopBits = 1;
+        int stopBits = 2;
         int parity = 0;
 
-        TestSerialPortWrapper wrapper = new TestSerialPortWrapper(commPortId, baudRate, flowControlIn, flowControlOut, dataBits, stopBits, parity);
+        TestSerialPortWrapper wrapper = new TestSerialPortWrapper(commPortId, baudRate, flowControlIn, flowControlOut, dataBits, stopBits, parity);*/
 
-        //IpParameters ipParameters = new IpParameters();
-        //ipParameters.setHost("localhost");
+        IpParameters ipParameters = new IpParameters();
+        ipParameters.setHost("192.168.0.110");
+        ipParameters.setPort(20108);
 
         ModbusFactory modbusFactory = new ModbusFactory();
 
-        ModbusMaster master = modbusFactory.createRtuMaster(wrapper);
+        // ModbusMaster master = modbusFactory.createRtuMaster(wrapper, false);
         // ModbusMaster master = modbusFactory.createAsciiMaster(wrapper);
-        //ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
+        ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
         // ModbusMaster master = modbusFactory.createUdpMaster(ipParameters);
 
         try {
             master.init();
             int slaveId = 10;
-
-            // readCoilTest(master, slaveId, 0, 10);
+            readHoldingRegistersTest(master, slaveId, 82, 11);
+            // readCoilTest(master, slaveId, 98, 200);
             // readCoilTest(master, slaveId, 99, 200);
-            // readDiscreteInputTest(master, slaveId, 1, 10);
+            // readDiscreteInputTest(master, slaveId, 100, 2);
             // readDiscreteInputTest(master, slaveId, 449, 72);
-            /*
-                //This is Success
-                //读取保持寄存器
-                readHoldingRegistersTest(master, slaveId, 9, 125);
-            */
+            // readHoldingRegistersTest(master, slaveId, 9, 125);
             // readHoldingRegistersTest(master, slaveId, 9, 120);
             // readInputRegistersTest(master, slaveId, 0, 1);
             // readInputRegistersTest(master, slaveId, 14, 8);
             // writeCoilTest(master, slaveId, 1, true);
             // writeCoilTest(master, slaveId, 110, true);
-            /*
-                //This is Success
-                //写单个寄存器
-                writeRegisterTest(master, slaveId, 0, 1);
-            */
+            // writeRegisterTest(master, slaveId, 1, 1);
             // writeRegisterTest(master, slaveId, 14, 12345);
             // readExceptionStatusTest(master, slaveId);
             // reportSlaveIdTest(master, slaveId);
             // writeCoilsTest(master, slaveId, 50, new boolean[] {true, false, false, true, false});
             // writeCoilsTest(master, slaveId, 115, new boolean[] {true, false, false, true, false});
-
-            //This is Success
-            //写多个寄存器
-            //写0x00AA
-            writeRegistersTest(master, slaveId, 170, new short[] {1});
-
-            //读0x00A7的1个寄存器
-            readHoldingRegistersTest(master, slaveId, 167, 1);
-
-
-
-            //读0x0052的11个寄存器
-            readHoldingRegistersTest(master, slaveId, 82, 11);
+            // writeRegistersTest(master, slaveId, 300, new short[] {1, 10, 100, 1000, 10000, (short)65535});
             // writeRegistersTest(master, slaveId, 21, new short[] {1, 10, 100, 1000, 10000, (short)65535});
-
-
-            // 03 Holding Register类型数据读取
-            BaseLocator<Number> loc = BaseLocator.holdingRegister(slaveId, 85, DataType.FOUR_BYTE_FLOAT);
-            Number value =  master.getValue(loc);
-
-            System.out.println("返回含氧量oxygen %信息："+ value);
-
-            // 03 Holding Register类型数据读取
-            loc = BaseLocator.holdingRegister(slaveId, 89, DataType.FOUR_BYTE_FLOAT);
-            value =  master.getValue(loc);
-
-            System.out.println("返回含氧量oxygen mg/l和ppm信息："+ value);
-
-            // 03 Holding Register类型数据读取
-            loc = BaseLocator.holdingRegister(slaveId, 93, DataType.FOUR_BYTE_FLOAT);
-            value =  master.getValue(loc);
-
-            System.out.println("返回温度Temperature信息："+ value);
-            //This is Success
             // writeMaskRegisterTest(master, slaveId, 26, 0xf2, 0x25);
 
             // readCoilTest(master, slaveId, 9, 5);
@@ -141,10 +101,9 @@ public class TestKuki1 {
             // System.out.println(results.getValue("hr1"));
             // System.out.println(results.getValue("hr2"));
 
-            // This's Successful Way to set Reg Data
-            // BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, 10, DataType.EIGHT_BYTE_INT_UNSIGNED);
-            // master.setValue(locator, 10000000);
-            // System.out.println(master.getValue(locator));
+            //BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, 50, DataType.EIGHT_BYTE_INT_UNSIGNED);
+            //master.setValue(locator, 10000000);
+            //System.out.println(master.getValue(locator));
         }
         finally {
             master.destroy();
@@ -316,4 +275,3 @@ public class TestKuki1 {
         }
     }
 }
-
