@@ -22,7 +22,7 @@ public class OPTODTcpSlaveTest {
         String host = "127.0.0.1";
         params.setHost(host );
         int slaveId = 10;
-        int port = 20108;
+        int port = 8890;
 
 
         boolean encapsulated = false;

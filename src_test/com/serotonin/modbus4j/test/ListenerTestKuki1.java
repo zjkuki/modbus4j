@@ -20,7 +20,7 @@ public class ListenerTestKuki1 {
      */
     public static void main(String[] args) throws IllegalDataAddressException {
         int slaveId = 10;
-        int port = 20108;
+        int port = 8890;
         pImage = new BasicProcessImage(slaveId);
          //pImage.setHoldingRegister(0, (short)00);
         //pImage.setHoldingRegister(1, (short)11);

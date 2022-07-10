@@ -23,7 +23,7 @@ public class MessageControl implements DataConsumer {
     private static int DEFAULT_RETRIES = 2;
     private static int DEFAULT_TIMEOUT = 500;
 
-    public boolean DEBUG = false;
+    public boolean DEBUG = true;
 
     private Transport transport;
     private MessageParser messageParser;
@@ -292,7 +292,7 @@ public class MessageControl implements DataConsumer {
             catch (Exception e) {
                 exceptionHandler.receivedException(e);
                 // Clear the buffer
-                //                dataBuffer.clear();
+                dataBuffer.clear();
             }
         }
     }

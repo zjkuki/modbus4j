@@ -37,7 +37,7 @@ public class ModbusUtils {
     /** Constant <code>TCP_PORT=502</code> */
     public static final int TCP_PORT = 502;
     /** Constant <code>IP_PROTOCOL_ID=0</code> */
-    public static final int IP_PROTOCOL_ID = 0; // Modbus protocol
+    public static final int IP_PROTOCOL_ID = 12345; // Modbus protocol
 
     //    public static final int MAX_READ_BIT_COUNT = 2000;
     //    public static final int MAX_READ_REGISTER_COUNT = 125;
